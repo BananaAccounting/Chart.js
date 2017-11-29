@@ -377,7 +377,7 @@ module.exports = function(Chart) {
 		var mouseX, mouseY;
 		var e = evt.originalEvent || evt;
 		var canvas = evt.currentTarget || evt.srcElement;
-		var boundingRect = canvas.getBoundingClientRect();
+		var boundingRect = {width:0, height:0, left:0,top:0,right:0,bottom:0,x:0,y:0};
 
 		var touches = e.touches;
 		if (touches && touches.length > 0) {
@@ -392,17 +392,12 @@ module.exports = function(Chart) {
 		// Scale mouse coordinates into canvas coordinates
 		// by following the pattern laid out by 'jerryj' in the comments of
 		// http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
-		var paddingLeft = parseFloat(helpers.getStyle(canvas, 'padding-left'));
-		var paddingTop = parseFloat(helpers.getStyle(canvas, 'padding-top'));
-		var paddingRight = parseFloat(helpers.getStyle(canvas, 'padding-right'));
-		var paddingBottom = parseFloat(helpers.getStyle(canvas, 'padding-bottom'));
+		var paddingLeft = 0;//parseFloat(helpers.getStyle(canvas, 'padding-left'));
+		var paddingTop = 0;//parseFloat(helpers.getStyle(canvas, 'padding-top'));
+		var paddingRight = 0;//parseFloat(helpers.getStyle(canvas, 'padding-right'));
+		var paddingBottom = 0;//parseFloat(helpers.getStyle(canvas, 'padding-bottom'));
 		var width = boundingRect.right - boundingRect.left - paddingLeft - paddingRight;
 		var height = boundingRect.bottom - boundingRect.top - paddingTop - paddingBottom;
-
-		// We divide by the current device pixel ratio, because the canvas is scaled up by that amount in each direction. However
-		// the backend model is in unscaled coordinates. Since we are going to deal with our model coordinates, we go back here
-		mouseX = Math.round((mouseX - boundingRect.left - paddingLeft) / (width) * canvas.width / chart.currentDevicePixelRatio);
-		mouseY = Math.round((mouseY - boundingRect.top - paddingTop) / (height) * canvas.height / chart.currentDevicePixelRatio);
 
 		return {
 			x: mouseX,
@@ -496,7 +491,7 @@ module.exports = function(Chart) {
 			document.defaultView.getComputedStyle(el, null).getPropertyValue(property);
 	};
 	helpers.retinaScale = function(chart, forceRatio) {
-		var pixelRatio = chart.currentDevicePixelRatio = forceRatio || window.devicePixelRatio || 1;
+		var pixelRatio = 1;
 		if (pixelRatio === 1) {
 			return;
 		}
@@ -588,18 +583,10 @@ module.exports = function(Chart) {
 			return value;
 		} :
 		function(value) {
-			/* global CanvasGradient */
-			if (value instanceof CanvasGradient) {
-				value = defaults.global.defaultColor;
-			}
-
 			return color(value);
 		};
 
 	helpers.getHoverColor = function(colorValue) {
-		/* global CanvasPattern */
-		return (colorValue instanceof CanvasPattern) ?
-			colorValue :
-			helpers.color(colorValue).saturate(0.5).darken(0.1).rgbString();
+		return helpers.color(colorValue).saturate(0.5).darken(0.1).rgbString();
 	};
 };

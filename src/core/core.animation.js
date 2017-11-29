@@ -7,7 +7,7 @@ var helpers = require('../helpers/index');
 
 defaults._set('global', {
 	animation: {
-		duration: 1000,
+		duration: 0,
 		easing: 'easeOutQuart',
 		onProgress: helpers.noop,
 		onComplete: helpers.noop
