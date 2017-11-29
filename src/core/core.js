@@ -3,15 +3,15 @@
 var defaults = require('./core.defaults');
 
 defaults._set('global', {
-	responsive: true,
+	responsive: false,
 	responsiveAnimationDuration: 0,
-	maintainAspectRatio: true,
+	maintainAspectRatio: false,
 	events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
 	hover: {
 		onHover: null,
 		mode: 'nearest',
 		intersect: true,
-		animationDuration: 400
+		animationDuration: 0
 	},
 	onClick: null,
 	defaultColor: 'rgba(0,0,0,0.1)',
